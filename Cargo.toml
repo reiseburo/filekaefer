@@ -1,0 +1,15 @@
+[package]
+name = "filekäfer"
+version = "0.1.0"
+authors = ["R. Tyler Croy <rtyler@brokenco.de>"]
+edition = "2018"
+
+[dependencies]
+clap       = "~2.18.0"
+futures    = "~0.1.21"
+inotify    = "~0.5.0"
+serde_json = "~1.0"
+
+[dependencies.rdkafka]
+version = "~0.20.0"
+features = ["ssl", "sasl"]

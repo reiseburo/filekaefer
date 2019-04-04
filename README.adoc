@@ -1,0 +1,8 @@
+= filekäfer
+
+A little Kafka daemon for shipping logs from the file system to topics.
+
+
+== Similar tools
+
+* link:https://github.com/Qihoo360/logkafka[logkafka]
