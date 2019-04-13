@@ -6,6 +6,7 @@ use clap::{App, Arg};
 use futures::*;
 
 use std::path::Path;
+use std::fs::File;
 use std::io::{Read, BufRead, Write, BufWriter};
 use std::collections::HashMap;
 
@@ -18,6 +19,8 @@ use rdkafka::util::get_rdkafka_version;
 use rdkafka::message::OwnedHeaders;
 
 mod tail;
+mod kafka;
+use kafka::Kafka;
 
 fn produce(brokers: &str, topic_name: &str) {
     let producer: FutureProducer = ClientConfig::new()
@@ -107,6 +110,8 @@ fn main() -> std::io::Result<()> {
         files.insert(wd, sf);
     }
 
+    let k: Kafka = Kafka::new(brokers);
+
     let mut buffer = [0u8; 4096];
     loop {
         let events = watcher.read_events_blocking(&mut buffer)
@@ -115,7 +120,7 @@ fn main() -> std::io::Result<()> {
         for event in events {
             if event.mask.contains(EventMask::MODIFY) {
                 let sf = files.get_mut(&event.wd).unwrap();
-                follow(sf);
+                follow(sf, &k);
             }
         }
     }
@@ -123,7 +128,7 @@ fn main() -> std::io::Result<()> {
     //produce(brokers, topic);
 }
 
-fn follow(sf: &mut tail::StatefulFile) {
+fn follow(sf: &mut tail::StatefulFile, k: &Kafka) {
     match sf.modification_type() {
         tail::ModificationType::Added => {}
         tail::ModificationType::Removed => {
@@ -133,7 +138,11 @@ fn follow(sf: &mut tail::StatefulFile) {
     }
     sf.update_metadata();
     sf.seek_to_cursor();
-    print_from_cursor(sf);
+
+    for line in sf.fd.by_ref().lines() {
+        k.write("test", &line.unwrap());
+    }
+
     sf.update_cursor();
 }
 
