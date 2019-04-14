@@ -18,6 +18,7 @@ use rdkafka::util::get_rdkafka_version;
 
 use rdkafka::message::OwnedHeaders;
 
+mod config;
 mod tail;
 mod kafka;
 use kafka::Kafka;

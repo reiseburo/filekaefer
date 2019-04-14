@@ -3,6 +3,54 @@
 A little Kafka daemon for shipping logs from the file system to topics.
 
 
+== Configuration
+
+=== JSON
+
+This configuration format is compatible with the <<kinesis, Amazon Kinesis Agent>>.
+
+.agent.json
+[source,json]
+----
+{
+  "checkpointFile": "/tmp/aws-kinesis-agent-checkpoints/main.log",
+  "kinesis.endpoint": "https://kinesis.us-west-2.amazonaws.com",
+  "flows": [
+    {
+      "filePattern": "/tmp/aws-kinesis-agent-test1.log*",
+      "initialPosition": "END_OF_FILE",
+      "kinesisStream": "aws-kinesis-agent-test1",
+      "dataProcessingOptions": [
+        {
+          "optionName": "CSVTOJSON",
+          "customFieldNames": [ "field1", "field2", "field3" ],
+          "delimiter": "\\t"
+        }
+      ]
+    },
+    {
+      "filePattern": "/tmp/aws-kinesis-agent-test2.log*",
+      "initialPosition": "START_OF_FILE",
+      "kinesisStream": "aws-kinesis-agent-test2",
+      "dataProcessingOptions": [
+        {
+          "optionName": "LOGTOJSON",
+          "logFormat": "COMMONAPACHELOG"
+        }
+      ]
+    }
+  ]
+}
+----
+
+
+Possible file positions are:
+
+* `START_OF_FILE`
+* `END_OF_FILE`
+
 == Similar tools
 
 * link:https://github.com/Qihoo360/logkafka[logkafka]
+[[kinesis]]
+* link:https://github.com/awslabs/amazon-kinesis-agent[amazon-kinesis-agent]

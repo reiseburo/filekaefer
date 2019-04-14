@@ -5,6 +5,9 @@ all: help
 build: ## Build filekäfer
 	cargo build
 
+check: build ## Run the tests for filekäfer
+	cargo test
+
 clean: ## Clean up generated code
 	rm -f example.log
 	cargo clean
@@ -24,4 +27,4 @@ watch: ## Watch the "test" topic in Kafka with kafkacat
 help: ## Display this help text
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: all build clean run help watch
+.PHONY: all build check clean run help watch
