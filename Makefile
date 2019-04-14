@@ -15,7 +15,7 @@ clean: ## Clean up generated code
 example.log:
 	while true; do date >> example.log; sleep 10; done;
 
-run: ## Run against example.log (run `make example.log` in another console)
+run: build ## Run against example.log (run `make example.log` in another console)
 	 ./target/debug/filekäfer -w ./example.log
 
 watch: ## Watch the "test" topic in Kafka with kafkacat

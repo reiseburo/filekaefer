@@ -49,6 +49,18 @@ Possible file positions are:
 * `START_OF_FILE`
 * `END_OF_FILE`
 
+
+== Hacking
+
+Working with filekäfer is relatively straightforward, assuming
+link:https://rust-lang.org[Rust] is already present on the system. Docker and
+`docker-compose` are recommended, as is link:https://github.com/edenhill/kafkacat[kafkacat] for debugging.
+
+Running `make` should output the available targets with a short description of
+each. For the most part `make run`, `make check`, and `make watch` will be used
+during development of filekäfer.
+
+
 == Similar tools
 
 * link:https://github.com/Qihoo360/logkafka[logkafka]
